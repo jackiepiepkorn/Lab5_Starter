@@ -1,9 +1,10 @@
 // explore.js
 
 const synth = window.speechSynthesis;
-const inputForm = document.querySelector("form");
-const inputTxt = document.querySelector("text-to-speak");
-const voiceSelect = document.querySelector('voice-select');
+  const inputForm = document.querySelector("explore");
+  const inputTxt = document.querySelector("text-to-speak");
+  const voiceSelect = document.querySelector('voice-select');
+let voices = [];
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
@@ -27,13 +28,12 @@ function init() {
     }
   }
 
-populateVoiceList();
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
-inputForm.onsubmit = (event) => {
-  event.preventDefault();
+// inputForm.onsubmit = (event) => {
+  // event.preventDefault();
 
   const utterThis = new SpeechSynthesisUtterance(inputTxt.value);
   const selectedOption =
@@ -46,4 +46,4 @@ inputForm.onsubmit = (event) => {
   synth.speak(utterThis);
 
   inputTxt.blur();
-};
+// };
