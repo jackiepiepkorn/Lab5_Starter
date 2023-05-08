@@ -1,18 +1,19 @@
 // explore.js
 
 const synth = window.speechSynthesis;
-  const inputForm = document.querySelector("explore");
-  const inputTxt = document.querySelector("text-to-speak");
-  const voiceSelect = document.querySelector('voice-select');
+const inputForm = document.querySelector("explore");
+const inputTxt = document.querySelector("text-to-speak");
+const voiceSelect = document.querySelector('voice-select');
 let voices = [];
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  populateVoiceList();
+  //populateVoiceList();
 }
   // Function to populate the dropdown with available voices
   function populateVoiceList() {
     voices = synth.getVoices();
+    console.log(voices);
   
     for (let i = 0; i < voices.length; i++) {
       const option = document.createElement("option");
@@ -27,7 +28,7 @@ function init() {
       voiceSelect.appendChild(option);
     }
   }
-
+  populateVoiceList();
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
 }
