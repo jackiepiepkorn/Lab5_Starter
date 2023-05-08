@@ -1,20 +1,18 @@
-// explore.js
-
 const synth = window.speechSynthesis;
-const inputForm = document.querySelector("explore");
-const inputTxt = document.querySelector("text-to-speak");
-const voiceSelect = document.querySelector('voice-select');
+const inputForm = document.getElementById("explore");
+const inputTxt = document.getElementById("text-to-speak");
+const voiceSelect = document.getElementById('voice-select');
+const button = document.querySelector('button');
+const img = document.querySelector('img');
 let voices = [];
+const utterThis = new SpeechSynthesisUtterance();
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  //populateVoiceList();
-}
-  // Function to populate the dropdown with available voices
-  function populateVoiceList() {
+
+  // Populate the dropdown with available voices
+  synth.addEventListener("voiceschanged", () => {
     voices = synth.getVoices();
-    console.log(voices);
-  
     for (let i = 0; i < voices.length; i++) {
       const option = document.createElement("option");
       option.textContent = `${voices[i].name} (${voices[i].lang})`;
@@ -27,24 +25,27 @@ function init() {
       option.setAttribute("data-name", voices[i].name);
       voiceSelect.appendChild(option);
     }
-  }
-  populateVoiceList();
-if (speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = populateVoiceList;
-}
+  })
 
-// inputForm.onsubmit = (event) => {
-  // event.preventDefault();
-
-  const utterThis = new SpeechSynthesisUtterance(inputTxt.value);
-  const selectedOption =
-    voiceSelect.selectedOptions[0].getAttribute("data-name");
-  for (let i = 0; i < voices.length; i++) {
-    if (voices[i].name === selectedOption) {
-      utterThis.voice = voices[i];
+  // Speak when button is pressed
+  button.addEventListener("click", () => {
+    utterThis.text = inputTxt.value;
+    const selectedOption = voiceSelect.selectedOptions[0].getAttribute("data-name");
+    for (let i = 0; i < voices.length; i++) {
+      if (voices[i].name === selectedOption) {
+        utterThis.voice = voices[i];
+      }
     }
+    synth.speak(utterThis);
+  })
+  
+  // Change image when it's speaking
+  utterThis.onstart = function(event) {
+    // Change the image source to a speaking image
+    img.src = 'assets/images/smiling-open.png';
   }
-  synth.speak(utterThis);
-
-  inputTxt.blur();
-// };
+  utterThis.onend = function(event) {
+    // Change the image source back to the original image
+    img.src = 'assets/images/smiling.png';
+  }
+}
